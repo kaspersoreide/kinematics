@@ -39,8 +39,8 @@ void Skeleton::move() {
     for (Joint* j : joints) {
         if (j->locked) continue;
         vec3 tmp = j->pos;
-        j->pos += j->pos - j->prevPos;
-        j->pos += vec3(0.0f, 0.0f, -0.0001f);
+        j->pos += j->b->vel;
+        //j->pos += vec3(0.0f, 0.0f, -0.0001f);
         j->prevPos = tmp;
     }
     
@@ -57,9 +57,10 @@ void Skeleton::move() {
         }
     }
     for (Joint* j : joints) {
-        //j.b->vel *= 0.99f;
-        //j.b->vel += 0.01f * (j.pos - j.b->pos);
-        j->b->pos = j->pos;
+        j->b->vel *= 0.95f;
+        j->b->vel += 0.01f * (j->pos - j->b->pos);
+        j->b->vel += vec3(0.0f, -0.0001f, 0.0f);
+        //j->b->pos = j->pos;
         j->b->move();
     }
 }
